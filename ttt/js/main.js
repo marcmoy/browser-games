@@ -1,4 +1,4 @@
-const View = require('./ttt-view');
+import View from './js/ttt-view';
 
 $( () => {
   const root = $('.ttt');

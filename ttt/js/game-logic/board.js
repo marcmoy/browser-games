@@ -1,4 +1,6 @@
-const MoveError = require("./moveError");
+import MoveError from './moveError';
+
+Board.marks = ['x', 'o'];
 
 class Board {
   constructor() {
@@ -119,6 +121,4 @@ class Board {
   }
 }
 
-Board.marks = ['x', 'o'];
-
-module.exports = Board;
+export default Board;

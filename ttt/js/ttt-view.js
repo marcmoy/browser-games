@@ -1,4 +1,4 @@
-const Game = require('./game-logic/game.js');
+import Game from './game-logic/game';
 
 class View {
   constructor($el) {
@@ -84,4 +84,4 @@ class View {
   }
 }
 
-module.exports = View;
+export default View;
