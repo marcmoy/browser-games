@@ -47,17 +47,15 @@
 	'use strict';
 	
 	var View = __webpack_require__(1);
-	var Game = __webpack_require__(2);
 	
 	$(function () {
 	  var root = $('.ttt');
-	  var game = new Game();
-	  var view = new View(game, root);
+	  var view = new View(root);
 	});
 
 /***/ },
 /* 1 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
@@ -65,11 +63,13 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
+	var Game = __webpack_require__(2);
+	
 	var View = function () {
-	  function View(game, $el) {
+	  function View($el) {
 	    _classCallCheck(this, View);
 	
-	    this.game = game;
+	    this.game = new Game();
 	    this.$el = $el;
 	
 	    this.setupBoard();
@@ -81,9 +81,8 @@
 	    value: function bindEvents() {
 	      var _this = this;
 	
-	      // install a handler on the `li` elements inside the board.
-	      this.$el.on("click", "li", function (event) {
-	        var $square = $(event.currentTarget);
+	      this.$el.on("click", "li", function (e) {
+	        var $square = $(e.currentTarget);
 	        _this.makeMove($square);
 	      });
 	    }
@@ -103,7 +102,6 @@
 	      $square.addClass(currentPlayer);
 	
 	      if (this.game.isOver()) {
-	        // cleanup click handlers.
 	        this.$el.off("click");
 	        this.$el.addClass("game-over");
 	
@@ -118,6 +116,7 @@
 	        }
 	
 	        this.$el.append($figcaption);
+	        this.resetBoard();
 	      }
 	    }
 	  }, {
@@ -126,16 +125,38 @@
 	      var $ul = $("<ul>");
 	      $ul.addClass("group");
 	
-	      for (var rowIdx = 0; rowIdx < 3; rowIdx++) {
-	        for (var colIdx = 0; colIdx < 3; colIdx++) {
+	      for (var row = 0; row < 3; row++) {
+	        for (var col = 0; col < 3; col++) {
 	          var $li = $("<li>");
-	          $li.data("pos", [rowIdx, colIdx]);
+	          $li.data("pos", [row, col]);
 	
 	          $ul.append($li);
 	        }
 	      }
 	
 	      this.$el.append($ul);
+	    }
+	  }, {
+	    key: "resetBoard",
+	    value: function resetBoard() {
+	      var _this2 = this;
+	
+	      var $button = $("<button>");
+	      $button.html("Play again?");
+	      $button.addClass("reset-button");
+	      this.$el.append($button);
+	
+	      this.$el.on("click", "button", function (e) {
+	        e.preventDefault();
+	        _this2.$el.empty();
+	
+	        var winner = _this2.game.winner();
+	        _this2.$el.removeClass("game-over winner-" + winner);
+	
+	        _this2.game = new Game();
+	        _this2.setupBoard();
+	        _this2.bindEvents();
+	      });
 	    }
 	  }]);
 	

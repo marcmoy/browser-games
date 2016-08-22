@@ -1,6 +1,8 @@
+const Game = require('./game-logic/game.js');
+
 class View {
-  constructor(game, $el) {
-    this.game = game;
+  constructor($el) {
+    this.game = new Game();
     this.$el = $el;
 
     this.setupBoard();
@@ -8,11 +10,10 @@ class View {
   }
 
   bindEvents() {
-    // install a handler on the `li` elements inside the board.
-    this.$el.on("click", "li", ( event => {
-      const $square = $(event.currentTarget);
+    this.$el.on("click", "li", e => {
+      const $square = $(e.currentTarget);
       this.makeMove($square);
-    }));
+    });
   }
 
   makeMove($square) {
@@ -29,7 +30,6 @@ class View {
     $square.addClass(currentPlayer);
 
     if (this.game.isOver()) {
-      // cleanup click handlers.
       this.$el.off("click");
       this.$el.addClass("game-over");
 
@@ -44,6 +44,7 @@ class View {
       }
 
       this.$el.append($figcaption);
+      this.resetBoard();
     }
   }
 
@@ -51,16 +52,35 @@ class View {
     const $ul = $("<ul>");
     $ul.addClass("group");
 
-    for (let rowIdx = 0; rowIdx < 3; rowIdx++) {
-      for (let colIdx = 0; colIdx < 3; colIdx++) {
+    for (let row = 0; row < 3; row++) {
+      for (let col = 0; col < 3; col++) {
         let $li = $("<li>");
-        $li.data("pos", [rowIdx, colIdx]);
+        $li.data("pos", [row, col]);
 
         $ul.append($li);
       }
     }
 
     this.$el.append($ul);
+  }
+
+  resetBoard() {
+    const $button = $("<button>");
+    $button.html("Play again?");
+    $button.addClass("reset-button");
+    this.$el.append($button);
+
+    this.$el.on("click", "button", e => {
+      e.preventDefault();
+      this.$el.empty();
+
+      let winner = this.game.winner();
+      this.$el.removeClass(`game-over winner-${winner}`);
+
+      this.game = new Game();
+      this.setupBoard();
+      this.bindEvents();
+    });
   }
 }
 

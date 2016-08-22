@@ -88,3 +88,12 @@ li:hover {
 figcaption {
   font-size: 30px;
 }
+
+button.reset-button {
+  height: 30px;
+  width: 150px;
+  margin: 20px;
+  border-radius: 5px;
+  font-size: inherit;
+  font-weight: inherit;
+}
