@@ -1,6 +1,6 @@
-const SnakeView = require('./snake-view');
+const SnakeView = require('./snake-view.js');
 
-$(function () {
-  const rootEl = $('.snake-game');
+$( () => {
+  const rootEl = $('.snakegame');
   new SnakeView(rootEl);
 });
