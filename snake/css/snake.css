@@ -1,99 +1,68 @@
-html, body, h1, figure, ul, li {
-  padding: 0;
+html, body, figure, figcaption, ul, li, h1 {
   margin: 0;
+  padding: 0;
   border: 0;
-  outline: 0;
-
-  display: inherit;
-  box-sizing: inherit;
-  background: transparent;
-
+  font: inherit;
+  text-align: inherit;
 }
 
-li {
-  list-style: none;
-}
-
-#game {
-  width: 500px
-  margin: 0 auto;
-}
-
-.row {
-  width: 500px;
-  box-sizing: border-box;
-  margin: 0 auto;
-}
-
-.group:after {
-  content: "";
-  display: block;
-  clear: both;
-}
-
-.square {
-  width: 25px;
-  height: 25px;
-  display: block;
-  float: left;
-  background-color: white;
-  box-sizing: border-box;
-  /*outline: 1px solid black;*/
-}
-
-.snake {
-  background-color: green;
-}
-
-.apple {
-  /*background-color: red;*/
-  background-image: url('../assets/apple.jpeg');
-  background-size: cover;
-  background-position: center;
-}
-
-.scoreboard {
-  width: 500px;
-  display: block;
-  padding: 30px 0px;
-  border: 5px solid black;
-  background-color: gray;
-  font-weight: bold;
-  color: white;
-  margin: 20px auto;
-  text-align: center;
-}
-
-.board {
-  border: 5px solid black;
-  width: 500px;
-  margin: 0 auto;
+.root {
   position: relative;
 }
 
-.playagain {
-  position: absolute;
-  border: 2px solid black;
-  border-radius: 5px;
-  width: 100px;
-  height: 30px;
-  background-color: lightgreen;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: block;
-  margin: auto;
-  text-align: center;
-  padding-top: 10px;
+ul {
+  list-style: none;
 }
 
-.playagain:hover {
-  background-color: green;
-  cursor: pointer;
-  color: white;
+body {
+  font-family: sans-serif;
+  text-align: center;
+  font-weight: bold;
 }
 
 h1 {
-  text-align: center;
+  font-size: 60px;
+  margin: 30px;
+}
+
+figure {
+  display: inline-block;
+  border: 5px solid black;
+}
+
+ul {
+  display: block;
+}
+
+ul:after {
+  content: "";
+  clear: both;
+  display: block;
+}
+
+li {
+  float: left;
+  width: 20px;
+  height: 20px;
+}
+
+.apple {
+  background-image: url('apple.png');
+  background-size: cover;
+}
+
+.snake {
+  background: green;
+}
+
+button {
+  position: absolute;
+  top: 40%;
+  left: 30%;
+  height: 30px;
+  width: 150px;
+  margin: 20px;
+  border-radius: 5px;
+  font-size: inherit;
+  font-weight: inherit;
 }

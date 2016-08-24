@@ -1,117 +1,82 @@
-const Snake = require('./snake.js');
-const Util = require('./util.js');
 const Board = require('./board.js');
-const Key = require('../keymaster.js');
 
-function SnakeView($el) {
-  this.board = new Board();
-  this.$el = $el;
-  this.setupInterface();
-  this.setupBoard();
-  // this.bindEvents();
-  this.interval = setInterval(() => {
-    this.step();
-  }, 100);
+class View {
+  constructor($el) {
+    this.$el = $el;
+    this.setupGame();
+  }
+
+  handleKeyEvent(event) {
+    if (View.KEYS[event.keyCode]) {
+      this.board.snake.turn(View.KEYS[event.keyCode]);
+    }
+  }
+
+  render() {
+    this.updateClasses(this.board.snake.segments, "snake");
+    this.updateClasses([this.board.apple.position], "apple");
+  }
+
+  updateClasses(coords, className) {
+    this.$li.filter(`.${className}`).removeClass();
+
+    coords.forEach( coord => {
+      const flatCoord = (coord.i * this.board.dim) + coord.j;
+      this.$li.eq(flatCoord).addClass(className);
+    });
+  }
+
+  setupGame() {
+    this.$el.empty();
+    this.board = new Board(20);
+    let html = "";
+    for (let i = 0; i < this.board.dim; i++) {
+      html += "<ul>";
+      for (let j = 0; j < this.board.dim; j++) {
+        html += "<li></li>";
+      }
+      html += "</ul>";
+    }
+
+    this.$el.html(html);
+    this.$li = this.$el.find("li");
+
+    this.intervalId = window.setInterval(
+      this.step.bind(this),
+      View.STEP_MILLIS
+    );
+
+    $(window).on("keydown", this.handleKeyEvent.bind(this));
+  }
+
+  step() {
+    if (this.board.snake.segments.length > 0) {
+      this.board.snake.move();
+      this.render();
+    } else {
+      alert("You lose!");
+      window.clearInterval(this.intervalId);
+      this.restartGame();
+    }
+  }
+
+  restartGame(){
+    let $button = $('<button>');
+    $button.text('Play again?');
+    $button.on('click', () => {
+      this.setupGame();
+    });
+    this.$el.append($button);
+  }
 }
 
-SnakeView.prototype.step = function() {
-  if (this.board.gameOver()) {
-    alert("Game Over!");
-    this.addPlayAgain();
-    clearInterval(this.interval);
-  }
-  this.board.snake.move();
-  this.board.hitApple();
-  this.render();
+View.KEYS = {
+  38: "N",
+  39: "E",
+  40: "S",
+  37: "W"
 };
 
-SnakeView.prototype.render = function() {
-  this.renderSnake();
-  this.renderApple();
-  this.updateScore();
-};
+View.STEP_MILLIS = 100;
 
-SnakeView.prototype.renderSnake = function() {
-  let snake = this.board.snake;
-  let snakePos = snake.segments;
-  $('.square').each((idx, sq) => {
-    const $sq = $(sq);
-    let sqPos = $sq.attr("data-pos").split(",");
-    sqPos = sqPos.map((el) => parseInt(el));
-
-    if (Util.arrayIncludes(snakePos, sqPos)) {
-      $sq.addClass('snake');
-    } else {
-      $sq.removeClass('snake');
-    }
-  });
-};
-
-SnakeView.prototype.renderApple = function () {
-  let apple = this.board.apple;
-  $('.square').each((idx, sq) => {
-    const $sq = $(sq);
-    let sqPos = $sq.attr("data-pos").split(",");
-    sqPos = sqPos.map((el) => parseInt(el));
-
-    if (Util.equals(apple, sqPos)) {
-      $sq.addClass('apple');
-    } else {
-      $sq.removeClass('apple');
-    }
-  });
-};
-
-SnakeView.prototype.setupInterface = function () {
-  const $scoreboard = $('<section>').addClass('scoreboard');
-  $scoreboard.text(`SCORE: ${this.board.snake.maxLength - 1}`);
-  this.$el.append($scoreboard);
-};
-
-
-SnakeView.prototype.setupBoard = function() {
-  const $board = $('<section>').addClass('board');
-  this.$el.append($board);
-  for (let i = 0; i < 20; i++) {
-    const $row = $("<ul>").addClass('row').addClass('group');
-    for (let j = 0; j < 20; j++) {
-      const $sq = $("<li>").addClass('square').attr('data-pos',[i,j]);
-      $row.append($sq);
-    }
-    $board.append($row);
-  }
-
-  this.bindKeyHandlers();
-};
-
-SnakeView.prototype.bindKeyHandlers = function() {
-  Key.key("up", () => this.board.snake.turn("N"));
-  Key.key("down", () => this.board.snake.turn("S"));
-  Key.key("left", () => this.board.snake.turn("W"));
-  Key.key("right", () => this.board.snake.turn("E"));
-};
-
-SnakeView.prototype.updateScore = function() {
-  $('.scoreboard').text(`SCORE: ${this.board.snake.maxLength - 1}`);
-};
-
-SnakeView.prototype.resetBoard = function() {
-  this.board = new Board();
-  $('.board').remove();
-  this.setupBoard();
-  this.interval = setInterval(() => {
-    this.step();
-  }, 100);
-};
-
-SnakeView.prototype.addPlayAgain = function() {
-  const $button = $('<div>').addClass('playagain');
-  $button.text('Play again?'.trim());
-  $button.on('click', event => {
-    $button.remove();
-    this.resetBoard();
-  });
-  $('.board').append($button);
-};
-
-module.exports = SnakeView;
+module.exports = View;
