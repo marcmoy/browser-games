@@ -21458,6 +21458,8 @@
 	
 	    _this.state = { board: new _minesweeper2.default.Board(10, 10) };
 	    _this.updateGame = _this.updateGame.bind(_this);
+	    _this.createResetMessage = _this.createResetMessage.bind(_this);
+	    _this.resetGame = _this.resetGame.bind(_this);
 	    return _this;
 	  }
 	
@@ -21472,34 +21474,49 @@
 	      this.setState({ board: this.state.board });
 	    }
 	  }, {
-	    key: 'createResetButton',
-	    value: function createResetButton() {
-	      this.state.board.revealTiles();
-	      return _react2.default.createElement(
+	    key: 'createResetMessage',
+	    value: function createResetMessage() {
+	      var button = _react2.default.createElement(
 	        'button',
 	        { onClick: this.resetGame.bind(this) },
 	        'Play again?'
+	      );
+	      var message = void 0;
+	      if (this.state.board.won()) message = 'You win!';
+	      if (this.state.board.lost()) message = 'You lost.';
+	
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'reset-message' },
+	        _react2.default.createElement(
+	          'h3',
+	          null,
+	          message
+	        ),
+	        button
 	      );
 	    }
 	  }, {
 	    key: 'resetGame',
 	    value: function resetGame() {
+	      this.state.board.revealTiles();
 	      this.setState({ board: new _minesweeper2.default.Board(10, 10) });
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
 	
-	      var resetButton = void 0;
+	      var resetMessage = void 0;
+	
 	      if (this.state.board.over()) {
-	        resetButton = this.createResetButton();
+	        resetMessage = this.createResetMessage();
 	      }
 	
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'board' },
 	        _react2.default.createElement(_react_board2.default, { board: this.state.board, updateGame: this.updateGame }),
-	        resetButton
+	        resetMessage
 	      );
 	    }
 	  }]);

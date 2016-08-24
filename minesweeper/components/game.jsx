@@ -7,6 +7,8 @@ class Game extends React.Component {
     super();
     this.state = { board: new Minesweeper.Board(10,10) };
     this.updateGame = this.updateGame.bind(this);
+    this.createResetMessage = this.createResetMessage.bind(this);
+    this.resetGame = this.resetGame.bind(this);
   }
 
   updateGame(tile, flagged) {
@@ -18,26 +20,39 @@ class Game extends React.Component {
     this.setState({ board: this.state.board });
   }
 
-  createResetButton() {
-    this.state.board.revealTiles();
-    return <button onClick={this.resetGame.bind(this)}>Play again?</button>;
+  createResetMessage() {
+    let button = <button onClick={this.resetGame.bind(this)}>
+                    Play again?
+                  </button>;
+    let message;
+    if (this.state.board.won()) message = 'You win!';
+    if (this.state.board.lost()) message = 'You lost.';
+
+    return (
+      <div className='reset-message'>
+        <h3>{message}</h3>
+        {button}
+      </div>
+    );
   }
 
   resetGame() {
+    this.state.board.revealTiles();
     this.setState({board: new Minesweeper.Board(10,10) });
   }
 
   render() {
 
-    let resetButton;
+    let resetMessage;
+
     if (this.state.board.over()) {
-      resetButton = this.createResetButton();
+      resetMessage = this.createResetMessage();
     }
 
     return(
       <div className="board">
         <Board board={this.state.board} updateGame={this.updateGame} />
-        {resetButton}
+        {resetMessage}
       </div>
     );
   }
