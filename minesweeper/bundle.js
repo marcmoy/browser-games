@@ -21499,7 +21499,6 @@
 	  }, {
 	    key: 'resetGame',
 	    value: function resetGame() {
-	      this.state.board.revealTiles();
 	      this.setState({ board: new _minesweeper2.default.Board(10, 10) });
 	    }
 	  }, {
@@ -21509,6 +21508,7 @@
 	      var resetMessage = void 0;
 	
 	      if (this.state.board.over()) {
+	        this.state.board.revealTiles();
 	        resetMessage = this.createResetMessage();
 	      }
 	

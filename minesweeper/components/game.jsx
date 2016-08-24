@@ -37,7 +37,6 @@ class Game extends React.Component {
   }
 
   resetGame() {
-    this.state.board.revealTiles();
     this.setState({board: new Minesweeper.Board(10,10) });
   }
 
@@ -46,6 +45,7 @@ class Game extends React.Component {
     let resetMessage;
 
     if (this.state.board.over()) {
+      this.state.board.revealTiles();
       resetMessage = this.createResetMessage();
     }
 
