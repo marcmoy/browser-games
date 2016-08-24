@@ -123,6 +123,10 @@ Board.prototype.won = function () {
   return won;
 };
 
+Board.prototype.over = function () {
+  return this.won() || this.lost();
+};
+
 module.exports = {
   Board: Board,
   Tile: Tile

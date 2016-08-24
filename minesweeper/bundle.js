@@ -61,9 +61,7 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	document.addEventListener('DOMContentLoaded', function () {
-	
 	  var root = document.getElementById('root');
-	
 	  _reactDom2.default.render(_react2.default.createElement(_game2.default, null), root);
 	});
 
@@ -21460,7 +21458,7 @@
 	
 	    _this.state = { board: new _minesweeper2.default.Board(10, 10) };
 	    _this.updateGame = _this.updateGame.bind(_this);
-	    _this.restartGame = _this.restartGame.bind(_this);
+	    _this.board = _this.state.board;
 	    return _this;
 	  }
 	
@@ -21472,54 +21470,16 @@
 	      } else {
 	        tile.explore();
 	      }
-	
-	      this.setState({ board: this.state.board });
-	    }
-	  }, {
-	    key: 'restartGame',
-	    value: function restartGame() {
-	      this.setState({ board: new _minesweeper2.default.Board(10, 10) });
+	      this.setState({ board: this.board });
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
 	
-	      var box = void 0;
-	      var resetButton = _react2.default.createElement(
-	        'button',
-	        { onClick: this.restartGame },
-	        'Restart?'
-	      );
-	
-	      if (this.state.board.won()) {
-	        box = _react2.default.createElement(
-	          'div',
-	          { className: 'box-modal' },
-	          _react2.default.createElement(
-	            'span',
-	            null,
-	            'You won!'
-	          ),
-	          resetButton
-	        );
-	      } else if (this.state.board.lost()) {
-	        box = _react2.default.createElement(
-	          'div',
-	          { className: 'box-modal' },
-	          _react2.default.createElement(
-	            'span',
-	            null,
-	            'You won!'
-	          ),
-	          resetButton
-	        );
-	      }
-	
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'board' },
-	        _react2.default.createElement(_react_board2.default, { board: this.state.board, updateGame: this.updateGame }),
-	        box
+	        _react2.default.createElement(_react_board2.default, { board: this.board, updateGame: this.updateGame })
 	      );
 	    }
 	  }]);
@@ -21655,6 +21615,10 @@
 	  return won;
 	};
 	
+	Board.prototype.over = function () {
+	  return this.won() || this.lost();
+	};
+	
 	module.exports = {
 	  Board: Board,
 	  Tile: Tile
@@ -21751,8 +21715,6 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -21779,36 +21741,36 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var _React$createElement;
 	
-	      var char = void 0,
-	          name = void 0;
+	      var char = void 0;
+	      var className = 'tile';
 	      var tile = this.props.tile;
 	
 	
 	      if (tile.explored) {
 	        if (tile.bombed) {
 	          char = '💣';
-	          name = "bomb";
+	          className += ' bomb';
 	        } else {
 	          char = tile.adjacentBombCount();
-	          name = "number";
+	          if (char === 0) char = ' ';
+	          className += ' number';
 	        }
 	      } else {
 	        if (tile.flagged) {
 	          char = '🚩';
-	          name = "flag";
+	          className += ' flag';
 	        } else {
 	          char = ' ';
-	          name = "closed";
+	          className += ' closed';
 	        }
 	      }
 	
 	      return _react2.default.createElement(
 	        'div',
-	        (_React$createElement = {
-	          className: name
-	        }, _defineProperty(_React$createElement, 'className', 'tile'), _defineProperty(_React$createElement, 'onClick', this.handleClick), _React$createElement),
+	        {
+	          className: className,
+	          onClick: this.handleClick },
 	        char
 	      );
 	    }

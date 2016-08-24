@@ -13,32 +13,35 @@ class Tile extends React.Component {
 
   render() {
 
-    let char, name;
+    let char;
+    let className = 'tile';
     const { tile } = this.props;
 
     if (tile.explored) {
       if (tile.bombed) {
         char = '💣';
-        name = "bomb";
+        className += ' bomb';
       } else {
         char = tile.adjacentBombCount();
-        name = "number";
+        if (char === 0) char = ' ';
+        className += ' number';
       }
     } else {
       if (tile.flagged) {
         char = '🚩';
-        name = "flag";
+        className += ' flag';
       } else {
         char = ' ';
-        name = "closed";
+        className += ' closed';
       }
     }
 
-    return(<div
-      className={name}
-      className="tile"
-      onClick={this.handleClick}
-      >{char}</div>);
+    return(
+      <div
+      className={className}
+      onClick={this.handleClick}>
+        {char}
+      </div>);
   }
 }
 

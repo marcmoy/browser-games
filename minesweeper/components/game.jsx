@@ -5,9 +5,9 @@ import Board from './react_board';
 class Game extends React.Component {
   constructor() {
     super();
-    this.state = { board: new Minesweeper.Board(10, 10) };
+    this.state = { board: new Minesweeper.Board(10,10) };
     this.updateGame = this.updateGame.bind(this);
-    this.restartGame = this.restartGame.bind(this);
+    this.board = this.state.board;
   }
 
   updateGame(tile, flagged) {
@@ -16,35 +16,14 @@ class Game extends React.Component {
     } else {
       tile.explore();
     }
-
-    this.setState({ board: this.state.board });
-  }
-
-  restartGame() {
-    this.setState( {board: new Minesweeper.Board(10,10)});
+    this.setState({ board: this.board });
   }
 
   render() {
 
-    let box;
-    let resetButton = <button onClick={this.restartGame}>Restart?</button>;
-
-    if (this.state.board.won()) {
-      box = <div className='box-modal'>
-              <span>You won!</span>
-              {resetButton}
-            </div>;
-    } else if (this.state.board.lost()) {
-      box = <div className='box-modal'>
-              <span>You won!</span>
-              {resetButton}
-            </div>;
-    }
-
     return(
       <div className="board">
-        <Board board={this.state.board} updateGame={this.updateGame} />
-        {box}
+        <Board board={this.board} updateGame={this.updateGame} />
       </div>
     );
   }
