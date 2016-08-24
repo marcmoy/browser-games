@@ -22,9 +22,9 @@ class Tile extends React.Component {
         char = '💣';
         className += ' bomb';
       } else {
-        char = tile.adjacentBombCount();
-        if (char === 0) char = ' ';
-        className += ' number';
+        char = tile.adjacentBombCount().toString();
+        if (char === '0') char = '';
+        className += ` number${char}`;
       }
     } else {
       if (tile.flagged) {

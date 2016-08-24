@@ -21458,7 +21458,6 @@
 	
 	    _this.state = { board: new _minesweeper2.default.Board(10, 10) };
 	    _this.updateGame = _this.updateGame.bind(_this);
-	    _this.board = _this.state.board;
 	    return _this;
 	  }
 	
@@ -21470,16 +21469,37 @@
 	      } else {
 	        tile.explore();
 	      }
-	      this.setState({ board: this.board });
+	      this.setState({ board: this.state.board });
+	    }
+	  }, {
+	    key: 'createResetButton',
+	    value: function createResetButton() {
+	      this.state.board.revealTiles();
+	      return _react2.default.createElement(
+	        'button',
+	        { onClick: this.resetGame.bind(this) },
+	        'Play again?'
+	      );
+	    }
+	  }, {
+	    key: 'resetGame',
+	    value: function resetGame() {
+	      this.setState({ board: new _minesweeper2.default.Board(10, 10) });
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
 	
+	      var resetButton = void 0;
+	      if (this.state.board.over()) {
+	        resetButton = this.createResetButton();
+	      }
+	
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'board' },
-	        _react2.default.createElement(_react_board2.default, { board: this.board, updateGame: this.updateGame })
+	        _react2.default.createElement(_react_board2.default, { board: this.state.board, updateGame: this.updateGame }),
+	        resetButton
 	      );
 	    }
 	  }]);
@@ -21619,6 +21639,14 @@
 	  return this.won() || this.lost();
 	};
 	
+	Board.prototype.revealTiles = function () {
+	  this.grid.forEach(function (row) {
+	    row.forEach(function (tile) {
+	      tile.explore();
+	    });
+	  });
+	};
+	
 	module.exports = {
 	  Board: Board,
 	  Tile: Tile
@@ -21752,9 +21780,9 @@
 	          char = '💣';
 	          className += ' bomb';
 	        } else {
-	          char = tile.adjacentBombCount();
-	          if (char === 0) char = ' ';
-	          className += ' number';
+	          char = tile.adjacentBombCount().toString();
+	          if (char === '0') char = '';
+	          className += ' number' + char;
 	        }
 	      } else {
 	        if (tile.flagged) {

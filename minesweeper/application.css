@@ -1,3 +1,22 @@
+html, body, figure, figcaption, ul, li, h1 {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  text-align: inherit;
+}
+
+h1 {
+  font-size: 40px;
+  margin: 30px;
+}
+
+body {
+  font-family: sans-serif;
+  text-align: center;
+  font-weight: bold;
+}
+
 #root {
   display: flex;
 }
@@ -7,10 +26,14 @@
   border-style: outset;
   float: left;
   display: inline-block;
-  height: 20px;
-  width: 20px;
+  height: 30px;
+  width: 30px;
   background: #eee;
-  text-align: center;
+  font-size: 25px;
+}
+
+.closed {
+  background-color: #ccc;
 }
 
 .row {
@@ -25,4 +48,49 @@
   content: "";
   display: block;
   clear: both;
+}
+
+.bomb {
+  background-color: red;
+}
+
+.number1 {
+  color: blue;
+}
+
+.number2 {
+  color: green;
+}
+
+.number3 {
+  color: red;
+}
+
+.number4 {
+  color: blue;
+}
+
+.number5 {
+  color: brown;
+}
+
+.number6 {
+  color: cyan;
+}
+
+.number7 {
+  color: black;
+}
+
+.number8 {
+  color: gray;
+}
+
+button {
+  height: 30px;
+  width: 150px;
+  margin: 20px;
+  border-radius: 5px;
+  font-weight: inherit;
+  font-size: 15px;
 }

@@ -7,7 +7,6 @@ class Game extends React.Component {
     super();
     this.state = { board: new Minesweeper.Board(10,10) };
     this.updateGame = this.updateGame.bind(this);
-    this.board = this.state.board;
   }
 
   updateGame(tile, flagged) {
@@ -16,14 +15,29 @@ class Game extends React.Component {
     } else {
       tile.explore();
     }
-    this.setState({ board: this.board });
+    this.setState({ board: this.state.board });
+  }
+
+  createResetButton() {
+    this.state.board.revealTiles();
+    return <button onClick={this.resetGame.bind(this)}>Play again?</button>;
+  }
+
+  resetGame() {
+    this.setState({board: new Minesweeper.Board(10,10) });
   }
 
   render() {
 
+    let resetButton;
+    if (this.state.board.over()) {
+      resetButton = this.createResetButton();
+    }
+
     return(
       <div className="board">
-        <Board board={this.board} updateGame={this.updateGame} />
+        <Board board={this.state.board} updateGame={this.updateGame} />
+        {resetButton}
       </div>
     );
   }

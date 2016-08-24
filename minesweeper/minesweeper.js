@@ -127,6 +127,14 @@ Board.prototype.over = function () {
   return this.won() || this.lost();
 };
 
+Board.prototype.revealTiles = function() {
+  this.grid.forEach(row => {
+    row.forEach(tile => {
+      tile.explore();
+    });
+  });
+};
+
 module.exports = {
   Board: Board,
   Tile: Tile
